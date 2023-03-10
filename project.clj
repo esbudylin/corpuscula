@@ -1,6 +1,6 @@
 (defproject corpuscula "0.1.0"
   :description "A tool for formatting Russian National Corpus data into Russian Wiktionary template."
-  :url "http://example.com/FIXME"
+  :url "http://esbudylin.github.io/corpuscula/"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v20.html"}
 
