@@ -1,0 +1,33 @@
+.pointer,input[type="button"]:not([disabled]) {
+	cursor: pointer;
+}
+
+.footer {
+	width: 505px;
+}
+
+div {
+	width: 500px
+}
+
+textarea {
+	width: 500px; 
+	resize: none;
+}
+
+[id="app"] {
+  margin: auto;
+  width: 500px;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.container {
+  position: relative;
+  height: 300px;
+}
+
+.bottomleft {
+  position: absolute;
+  bottom: 5px;
+}
