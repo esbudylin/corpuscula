@@ -22,6 +22,10 @@ textarea {
   padding: 10px;
 }
 
+.info {
+  margin: auto;
+}
+
 .container {
   position: relative;
   height: 300px;
