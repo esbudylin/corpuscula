@@ -2,6 +2,9 @@
 
 A single-page tool for formatting Russian National Corpus data into Russian Wiktionary templates.
 
+## Usage
+![usage example](https://user-images.githubusercontent.com/111509227/224373062-9407f310-b794-4c2a-bc9f-50a918f98494.gif)
+
 ## Setup
 
 To get an interactive development environment run:
