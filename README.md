@@ -1,6 +1,6 @@
 # corpuscula
 
-A single-page tool for formatting Russian National Corpus data into Russian Wiktionary template.
+A single-page tool for formatting Russian National Corpus data into Russian Wiktionary templates.
 
 ## Setup
 
