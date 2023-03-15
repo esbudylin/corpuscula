@@ -6,7 +6,7 @@
 
 (enable-console-print!)
 
-(defonce initial-data
+(def initial-data
   {:title ""
    :text ""
    :idxs-to-highlight #{}})
@@ -15,7 +15,7 @@
 
 (defonce current-screen (atom 0))
 
-(defonce max-screen 2)
+(def max-screen 2)
 
 (def clipboard
   (-> js/navigator
@@ -120,13 +120,15 @@
      (for [[key caption a-value] checkboxes] ^{:key key} [checkbox a-value caption])
      [change-screen-panel]]))
 
+(defn screens []
+  [[text-input-screen]
+  [words-to-highlight-choosing (@text-data :text)]
+  [template-output (@text-data :title) (@text-data :text) (@text-data :idxs-to-highlight)]])
+
 (defn main []
   (fn []
     [:div.container
-     (case @current-screen
-       0 [text-input-screen]
-       1 [words-to-highlight-choosing (@text-data :text)]
-       2 [template-output (@text-data :title) (@text-data :text) (@text-data :idxs-to-highlight)])]))
+     (nth (screens) @current-screen)]))
 
 (rd/render [main]
            (. js/document (getElementById "app")))
