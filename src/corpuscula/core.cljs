@@ -112,7 +112,7 @@
 (defn template-output [title text idxs-to-highlight]
   (let [keys '(:rnc? :add-params? :without-quotes? :publisher-without-quotes?)
         captions '("источник – НКРЯ" "использовать названия параметров" "заголовок без кавычек" "издание без кавычек")
-        a-values (map #(reagent/atom %) (conj (repeat (dec (count captions)) false) true))
+        a-values (map #(reagent/atom %) (conj (repeat false) true))
         checkboxes (map vector keys (map vector captions a-values))]
     [:div
      [:p "Шаблон:"]
