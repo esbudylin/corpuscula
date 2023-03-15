@@ -24,15 +24,15 @@
 (def write-text-into-clipboard
   (.bind (goog.object/get clipboard "writeText") clipboard))
 
-(defn change-screen-button [text change disabled? update-func]
+(defn change-screen-button [text change update-func disabled?]
   [:input {:type "button" :disabled disabled? :value text
            :on-click (fn [] (swap! current-screen change) (when update-func (update-func)))}])
 
 (defn change-screen-panel [update-func]
-  [:div.bottomleft [change-screen-button "Назад" dec (= @current-screen 0) update-func]
+  [:div.bottomleft [change-screen-button "Назад" dec update-func (= @current-screen 0)]
    (if (= @current-screen max-screen)
-     [change-screen-button "В начало" (partial * 0) false #(reset! text-data initial-data)]
-     [change-screen-button "Вперёд" inc false update-func])])
+     [change-screen-button "В начало" (partial * 0) #(reset! text-data initial-data)]
+     [change-screen-button "Вперёд" inc update-func])])
 
 (defn text-input [value intro-text id enter-func multiline? input-check]
   [:div
