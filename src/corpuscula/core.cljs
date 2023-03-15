@@ -59,11 +59,11 @@
 (defn text-input-screen []
   (let [text (reagent/atom (@text-data :text))
         title (reagent/atom (@text-data :title))
-        swap-values
-        #((when (not= @text (@text-data :text))
-            (swap! text-data assoc :idxs-to-highlight #{})
-            (swap! text-data assoc :text @text))
-          (swap! text-data assoc :title @title))]
+        swap-values (fn []
+                      (when (not= @text (@text-data :text))
+                        (swap! text-data assoc :idxs-to-highlight #{})
+                        (swap! text-data assoc :text @text))
+                      (swap! text-data assoc :title @title))]
     [:div
      [text-input text "Введите текст:" "text"
       #(.focus (.getElementById js/document "title")) true #(input-check text title "title")]
