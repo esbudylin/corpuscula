@@ -122,8 +122,8 @@
 
 (defn screens []
   [[text-input-screen]
-  [words-to-highlight-choosing (@text-data :text)]
-  [template-output (@text-data :title) (@text-data :text) (@text-data :idxs-to-highlight)]])
+   [words-to-highlight-choosing (@text-data :text)]
+   [template-output (@text-data :title) (@text-data :text) (@text-data :idxs-to-highlight)]])
 
 (defn main []
   (fn []
