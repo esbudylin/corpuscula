@@ -87,6 +87,7 @@
     [:div [:p "Выберите слова для выделения:"]
      (when text (doall (for [[i t h-atom] split-text]
                          ^{:key i} [word-to-choose t h-atom])))
+     [:div.spacer]
      [change-screen-panel #(swap! text-data assoc :idxs-to-highlight
                                   (set (for [[i _ h-atom] split-text :when (true? @h-atom)] i)))]]))
 
