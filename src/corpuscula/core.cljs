@@ -113,11 +113,11 @@
   (let [keys '(:rnc? :add-params? :without-quotes? :publisher-without-quotes?)
         captions '("источник – НКРЯ" "использовать названия параметров" "заголовок без кавычек" "издание без кавычек")
         a-values (map #(reagent/atom %) (conj (repeat false) true))
-        checkboxes (map vector keys (map vector captions a-values))]
+        checkboxes (map vector keys captions a-values)]
     [:div
      [:p "Шаблон:"]
      [template-textarea title text idxs-to-highlight #(zipmap keys (for [value a-values] @value))]
-     (for [[key [caption a-value]] checkboxes] ^{:key key} [checkbox a-value caption])
+     (for [[key caption a-value] checkboxes] ^{:key key} [checkbox a-value caption])
      [change-screen-panel]]))
 
 (defn main []
