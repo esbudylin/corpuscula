@@ -28,7 +28,11 @@ textarea {
 
 .container {
   position: relative;
-  height: 300px;
+  min-height: 300px;
+}
+
+.spacer {
+  height: 30px;
 }
 
 .bottomleft {
