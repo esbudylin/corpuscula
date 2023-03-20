@@ -1,11 +1,17 @@
 (ns corpuscula.template-generator
   (:require [clojure.string :as str]))
 
+(def author-name "[А-Я][а-я]+(\\-[А-Я][а-я]+)?")
+
+(def author-initial "[А-Я](?:[а-я]{1,2})?\\.")
+
 (def author-regex
   (re-pattern (str
-               "((^| )(?:[А-Я](?:[а-я]{1,2})?\\. ?(?:[А-Я](?:[а-я]{1,2})?\\.)? [А-Я][а-я]+),?"
-               "|(^| )(?:[А-Я][а-я]+ [А-Я](?:[а-я]{1,2})?\\.(?: ?[А-Я](?:[а-я]{1,2})?\\.)?),?"
-               "|(((^| )([А-Я][а-я]+)){2,3}),?)+")))
+               "^( ?(?:" author-initial " ?(?:" author-initial ")? " author-name "),?"
+               "|( ?(?:" author-name " " author-initial "(?: ?" author-initial ")?)),?"
+               "|(( ?(" author-name ")){2,3})"
+               "|( ?[а-я]+ " author-name " \\(" author-name "\\))" ; e.g. архиепископ Иннокентий (Борисов)
+               ",?)+")))
 
 (def publisher-regex
   #"«(.*?)»| ([a-zA-Z0-9А-Я \.\-—:\?]+), ")
@@ -18,7 +24,10 @@
 
 (defn title-regex [author date]
   (re-pattern
-   (apply str (flatten [author "(?:\\.| )?(.*?)" (if date [" \\(?" date] "$")]))))
+   (apply str (flatten
+               [(when author (str/replace author #"[\(\)]" #(str "\\" %)))
+                "(?:\\.| )?(.*?)"
+                (if date [" \\(?" date] "$")]))))
 
 (defn find-highlighted-group [text highlights]
   (loop [text text acc [] to-test []]
