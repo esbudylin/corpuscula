@@ -76,27 +76,36 @@
         years-appended (if (and add-params? (re-find #"[\-–]" (last split-date))) (str/join " " [date "гг."]) date)]
     (when years-appended (str/replace years-appended "-" "–"))))
 
-(defn handle-title [example-title add-params?]
+(defn handle-quotes [text without-quotes?]
+  (if-not without-quotes?
+    (str/replace text #"[«»]" #(if (= "«" %) "{{\"|" "}}"))
+    text))
+
+(defn handle-title [example-title [add-params? without-quotes?]]
   (let [[work-title publisher-data] (str/split example-title #"//")
         author (first (re-find author-regex work-title))
         date (last (last (re-seq date-regex work-title)))
-        title (last (re-find (title-regex author date) work-title))
+        title (str/trim (last (re-find (title-regex author date) work-title)))
         [publication-date publisher] (when publisher-data
                                        [(last (last (re-seq publication-date-regex publisher-data)))
                                         (last (filter some? (re-find publisher-regex publisher-data)))])]
-    [author (str/trim title) (format-date date add-params?) publisher (format-date publication-date add-params?)]))
+    [author
+     (handle-quotes title without-quotes?)
+     (format-date date add-params?)
+     publisher
+     (format-date publication-date add-params?)]))
 
 (def param-names ["автор" "титул" "дата" "издание" "дата издания"])
 
 (defn generate-template [title text highlights extra-params]
   (let [text (apply str (flatten (highlight-examples text highlights "{{выдел|", "}}")))
-        values (handle-title title (extra-params :add-params?))]
+        values (handle-title title (map extra-params [:add-params? :without-quotes?]))]
     (apply str (flatten
                 ["{{пример|" text
                  (if (extra-params :add-params?)
                    (for [[name value] (zipmap param-names values) :when value]
                      ["|" name "=" value])
-                   (for [[i, value] (map-indexed vector values) :while (some some? (drop i values))]
+                   (for [[i value] (map-indexed vector values) :while (some some? (drop i values))]
                      ["|" value]))
                  (when (extra-params :rnc?) "|источник=НКРЯ")
                  (when (extra-params :without-quotes?) "|бк=1")
