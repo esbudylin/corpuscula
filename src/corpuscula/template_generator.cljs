@@ -16,6 +16,9 @@
 (def publisher-regex
   #"«(.*?)»| ([a-zA-Z0-9А-Я \.\-—:\?]+), ")
 
+(def publisher-regex-media
+  #"^ (.*?), ")
+
 (def date-regex
   #"\(([0-9-—.]+)\)")
 
@@ -81,14 +84,21 @@
     (str/replace text #"[«»]" #(if (= "«" %) "{{\"|" "}}"))
     text))
 
+(defn handle-publisher-data [publisher-data]
+  (when publisher-data
+    (let [publication-date (last (last (re-seq publication-date-regex publisher-data)))
+          media-corpus? (re-matches #"[0-9]{4}\.[0-9]{2}" publication-date)
+          publisher (last (filter some? (re-find
+                                         (if media-corpus? publisher-regex-media publisher-regex)
+                                         publisher-data)))]
+      [publication-date publisher])))
+
 (defn handle-title [example-title [add-params? without-quotes?]]
   (let [[work-title publisher-data] (str/split example-title #"//")
         author (first (re-find author-regex work-title))
         date (last (last (re-seq date-regex work-title)))
         title (str/trim (last (re-find (title-regex author date) work-title)))
-        [publication-date publisher] (when publisher-data
-                                       [(last (last (re-seq publication-date-regex publisher-data)))
-                                        (last (filter some? (re-find publisher-regex publisher-data)))])]
+        [publication-date publisher] (handle-publisher-data publisher-data)]
     [author
      (handle-quotes title without-quotes?)
      (format-date date add-params?)
