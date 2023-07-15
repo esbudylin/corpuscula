@@ -34,21 +34,20 @@
 
 (defn find-highlighted-group [text highlights]
   (loop [text text acc [] to-test []]
-    (if (empty? text) acc
-        (let [[i snippet] (first text)]
-          (cond
-            (contains? highlights i) (recur (rest text) (conj acc to-test snippet) [])
-            (not (re-matches #"[А-Яа-я\w]+|\." snippet)) (recur (rest text) acc (conj to-test snippet))
-            :else acc)))))
+    (if-let [[i snippet] (first text)]
+      (cond
+        (contains? highlights i) (recur (rest text) (conj acc to-test snippet) [])
+        (not (re-matches #"[А-Яа-я\w]+|\." snippet)) (recur (rest text) acc (conj to-test snippet))
+        :else acc) acc)))
 
 (defn highlight-examples [text highlights opening closing]
   (loop [text (map-indexed vector text) acc []]
-    (if (empty? text) acc
-        (let [[i snippet] (first text)]
-          (if (contains? highlights i)
-            (let [highlighted-group (flatten (find-highlighted-group text highlights))]
-              (recur (drop (count highlighted-group) text) (conj acc [opening highlighted-group closing])))
-            (recur (rest text) (conj acc snippet)))))))
+    (cond
+      (empty? text) acc
+      (contains? highlights (first (first text)))
+      (let [highlighted-group (flatten (find-highlighted-group text highlights))]
+        (recur (drop (count highlighted-group) text) (conj acc [opening highlighted-group closing])))
+      :else (recur (rest text) (conj acc (second (first text)))))))
 
 (defn match-numeric-month [numeric-month]
   (case numeric-month
