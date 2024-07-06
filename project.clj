@@ -1,8 +1,8 @@
 (defproject corpuscula "0.1.0"
   :description "A tool for formatting Russian National Corpus data into Russian Wiktionary template."
   :url "http://esbudylin.github.io/corpuscula/"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v20.html"}
+  :license {:name "MIT License"
+            :url "https://github.com/esbudylin/corpuscula/blob/main/LICENSE"}
 
   :min-lein-version "2.9.1"
 
